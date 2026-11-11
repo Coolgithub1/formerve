@@ -1,0 +1,9 @@
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# Local-only: editor/agent settings, and an unrelated folder that isn't part of this site
+.claude/
+studyflow-case-study/

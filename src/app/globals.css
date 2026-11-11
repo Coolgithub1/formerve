@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0b0b0f;
+  --foreground: #f5f5f7;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* --- Feed --- */
+
+@keyframes watch-countdown {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+.watch-countdown-fill {
+  width: 0%;
+  animation-name: watch-countdown;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+/* New reel scrolls up into place, like a phone feed. */
+@keyframes reel-enter {
+  from { transform: translateY(40%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.reel-card {
+  animation: reel-enter 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Decided reel flies off toward the button that was chosen. */
+.reel-card[data-exit="like"] {
+  transition: transform 280ms ease-in, opacity 280ms ease-in;
+  transform: translateX(60%) rotate(8deg);
+  opacity: 0;
+}
+
+.reel-card[data-exit="dislike"] {
+  transition: transform 280ms ease-in, opacity 280ms ease-in;
+  transform: translateX(-60%) rotate(-8deg);
+  opacity: 0;
+}
+
+/* --- Results --- */
+
+@keyframes result-reveal {
+  from { transform: scale(0.94) translateY(12px); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
+.result-reveal {
+  animation: result-reveal 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* "E +8" tag in the live panel: pops in, then fades so only the latest change stands out. */
+@keyframes live-change {
+  0% { transform: translateY(4px) scale(0.9); opacity: 0; }
+  15% { transform: none; opacity: 1; }
+  75% { opacity: 1; }
+  100% { opacity: 0.35; }
+}
+
+.live-change {
+  animation: live-change 2.4s ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .result-reveal,
+  .live-change {
+    animation: none;
+  }
+
+  .reel-card,
+  .reel-card[data-exit] {
+    animation: none;
+    transition: opacity 150ms;
+    transform: none;
+  }
+}
