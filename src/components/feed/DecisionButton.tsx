@@ -16,7 +16,7 @@ const VARIANTS: Record<Decision, { label: string; key: string; icon: string; col
 };
 
 // Sits beside the reel (dislike on the left, like on the right, matching the arrow keys).
-// Locked and dimmed until the 3s watch lock passes.
+// Dimmed only while the next reel is loading.
 export function DecisionButton({ decision, enabled, chosen, onDecide }: Props) {
   const v = VARIANTS[decision];
   return (

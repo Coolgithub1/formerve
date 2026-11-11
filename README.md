@@ -1,6 +1,6 @@
 # formerve
 
-Scroll 40 reels, like or dislike each one after 3 seconds, and get your
+Scroll 40 reels, like or dislike each one, and get your
 four-letter personality type at the end, with the bars updating live as you go.
 See [PLAN.md](PLAN.md) for the design and decisions.
 

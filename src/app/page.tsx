@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { REELS_PER_SESSION } from "@/lib/config";
 
-// Landing page. TODO: real copy, visuals, explain the 3-second rule.
+// Landing page. TODO: real copy and visuals.
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-6">

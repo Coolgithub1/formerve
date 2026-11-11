@@ -9,8 +9,10 @@ import { DecisionButton } from "@/components/feed/DecisionButton";
 import { ProgressBar } from "@/components/feed/ProgressBar";
 import { LiveTypePanel } from "@/components/feed/LiveTypePanel";
 
-// Desktop layout: phone-style 9:16 reel in the middle, dislike on the left, like on the right,
-// live type panel beside it on wide screens.
+// Layouts:
+// - Desktop (landscape): 9:16 reel in the middle, dislike left, like right, live panel beside it.
+// - Phone: reel on top, the two buttons in a row underneath, no live panel.
+// - Portrait screens from tablet size up (e.g. a gallery kiosk): bigger reel, live panel below.
 export default function FeedPage() {
   const feed = useFeedSession();
   const [muted, setMuted] = useState(false);
@@ -23,19 +25,32 @@ export default function FeedPage() {
   const canDecide = feed.phase === "deciding";
   const exiting = feed.phase === "submitting" ? feed.lastDecision : null;
 
+  const livePanel = (className?: string) =>
+    showLive ? (
+      <LiveTypePanel live={feed.live} position={feed.position} onHide={() => setShowLive(false)} className={className} />
+    ) : (
+      <button
+        type="button"
+        onClick={() => setShowLive(true)}
+        className="cursor-pointer rounded-full border border-white/15 px-4 py-2 text-xs opacity-60 hover:opacity-100"
+      >
+        Show live type
+      </button>
+    );
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-5 p-6">
       <div className="w-[min(45vh,420px)]">
         <ProgressBar current={feed.position} total={feed.total} />
       </div>
 
-      <div className="flex items-center gap-12">
+      <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-5">
         <DecisionButton decision="dislike" enabled={canDecide} chosen={exiting === "dislike"} onDecide={feed.decide} />
 
-        <div className="relative aspect-[9/16] h-[min(78vh,750px)] overflow-hidden rounded-3xl border border-white/10 bg-neutral-900 shadow-2xl">
+        <div className="relative aspect-[9/16] h-[min(78vh,750px)] overflow-hidden rounded-3xl border border-white/10 bg-neutral-900 shadow-2xl max-sm:order-first max-sm:h-[62svh] md:portrait:h-[min(58vh,1100px)]">
           {feed.clip && feed.phase !== "done" && (
             <div key={feed.clip.id + feed.position} className="reel-card absolute inset-0" data-exit={exiting ?? undefined}>
-              <ReelPlayer clip={feed.clip} locked={feed.phase === "watching"} muted={muted} onUnlock={feed.unlock} />
+              <ReelPlayer clip={feed.clip} muted={muted} />
             </div>
           )}
 
@@ -62,23 +77,13 @@ export default function FeedPage() {
 
         <DecisionButton decision="like" enabled={canDecide} chosen={exiting === "like"} onDecide={feed.decide} />
 
-        <div className="hidden lg:block">
-          {showLive ? (
-            <LiveTypePanel live={feed.live} position={feed.position} onHide={() => setShowLive(false)} />
-          ) : (
-            <button
-              type="button"
-              onClick={() => setShowLive(true)}
-              className="cursor-pointer rounded-full border border-white/15 px-4 py-2 text-xs opacity-60 hover:opacity-100"
-            >
-              Show live type
-            </button>
-          )}
-        </div>
+        <div className="hidden lg:landscape:block">{livePanel()}</div>
       </div>
 
+      <div className="hidden md:portrait:block">{livePanel("w-[min(90vw,40rem)]")}</div>
+
       <p className="text-sm opacity-50">
-        {feed.phase === "watching" ? "Watch for 3 seconds…" : canDecide ? "Like it or not?" : " "}
+        {canDecide ? "Like it or not?" : " "}
       </p>
     </main>
   );

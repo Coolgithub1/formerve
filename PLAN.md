@@ -8,7 +8,7 @@ read at the end, produced by our own algorithm.
 | Topic | Decision |
 |---|---|
 | Session length | **40 reels**, fixed. No timer. |
-| The 3 seconds | Reel plays; like/dislike unlock **after 3s**. Clip keeps looping until the user decides. |
+| Deciding | Like/dislike work **as soon as a reel appears** (the earlier 3-second lock was removed). Clip keeps looping until the user decides. |
 | Personality model | **Four letter axes** (E/I, S/N, T/F, J/P) → a **4-letter type** with our own 16 names. Never call it "MBTI" or "Myers-Briggs" (trademarks), and don't reuse other tests' type names. |
 | Live feedback | A panel beside the feed shows the type so far and moves the four bars after every reaction, with a tag like "E +8" on each axis that moved. Can be hidden. |
 | Accuracy check | Results page asks "Already know your type?" and shows a letter-by-letter comparison. Not stored yet; saving these answers is the main reason to add a backend later. |
@@ -25,7 +25,7 @@ Everything runs in the browser (`src/lib/feed/localSource.ts`):
 
 1. A session starts in memory.
 2. The algorithm picks the next clip and sends the current estimate to the live panel.
-3. Reel plays. After 3s the like/dislike controls unlock.
+3. Reel plays. The user can like or dislike right away.
 4. The reaction `{ clipId, decision, reactionMs, position }` is added to the session.
 5. After 40 reactions the result is computed and the browser goes to a results link that
    contains it (`src/lib/shareLink.ts`).
@@ -50,7 +50,8 @@ Example — festival crowd: `{ extraversion: 0.9, intuition: 0, feeling: 0.1, pe
 `variance` (starts high = unsure). Each reaction nudges the mean toward the clip's
 vector (like) or away from it (dislike), weighted by how strongly the clip loads
 on that trait. Variance shrinks for traits that got evidence.
-Reaction time is a confidence weight: fast decisions count a bit more than slow ones.
+Reaction time (from the reel appearing) is a confidence weight: decisions within 1.5s
+count fully as gut reactions, slower ones gradually less (down to half weight at 5s+).
 
 **Recommender** (`recommender.ts`). From unseen clips:
 - 70% of the time → **probe**: pick the clip whose trait vector points most at the
@@ -74,7 +75,7 @@ retake). The same estimate is sent with every reel to drive the live panel.
    difference (nearly every clip gets shown); with 200, smart picking clearly
    beats random. Each trait also needs clips at both ends (e.g. Sensing clips,
    not only Intuitive ones).
-2. **Feed UI** — player, 3s lock, decision overlay, keyboard controls, preloading,
+2. **Feed UI** — player, decision buttons, keyboard controls, preloading,
    transitions, live type panel.
 3. **Storage (later, optional)** — a backend to save sessions and "Already know your
    type?" answers (to measure real accuracy), plus short share links. Not needed to launch.

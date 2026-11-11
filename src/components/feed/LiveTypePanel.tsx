@@ -9,6 +9,8 @@ interface Props {
   /** Changes on every new reel, so the change tags replay their animation. */
   position: number;
   onHide: () => void;
+  /** Width classes; defaults to the narrow side-panel width. */
+  className?: string;
 }
 
 /** Letter the axis moved toward and by how many points, e.g. { letter: "E", points: 8 }. */
@@ -21,7 +23,7 @@ function axisChange(live: LiveEstimate, trait: Trait) {
 
 // Sits beside the reel and updates after every like/dislike: the type so far,
 // one bar per axis, and a tag showing which way the last reaction pushed each axis.
-export function LiveTypePanel({ live, position, onHide }: Props) {
+export function LiveTypePanel({ live, position, onHide, className }: Props) {
   // "?" until an axis has moved off the midpoint, so we don't claim letters we have no evidence for.
   const code = live
     ? TRAITS.map((t) => {
@@ -32,7 +34,7 @@ export function LiveTypePanel({ live, position, onHide }: Props) {
   const started = Boolean(live?.previous);
 
   return (
-    <aside className="w-72 rounded-3xl border border-white/10 bg-white/[0.03] p-5">
+    <aside className={`${className ?? "w-72"} rounded-3xl border border-white/10 bg-white/[0.03] p-5`}>
       <div className="flex items-center justify-between">
         <h2 className="text-xs font-medium tracking-widest uppercase opacity-60">Your type so far</h2>
         <button type="button" onClick={onHide} className="cursor-pointer text-xs opacity-50 hover:opacity-90">

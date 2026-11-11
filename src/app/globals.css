@@ -12,18 +12,6 @@ body {
 
 /* --- Feed --- */
 
-@keyframes watch-countdown {
-  from { width: 0%; }
-  to { width: 100%; }
-}
-
-.watch-countdown-fill {
-  width: 0%;
-  animation-name: watch-countdown;
-  animation-timing-function: linear;
-  animation-fill-mode: forwards;
-}
-
 /* New reel scrolls up into place, like a phone feed. */
 @keyframes reel-enter {
   from { transform: translateY(40%); opacity: 0; }

@@ -9,9 +9,10 @@ import { resultsUrl } from "@/lib/shareLink";
 
 /**
  * Drives the feed:
- *   loading -> watching (3s lock) -> deciding -> submitting -> watching (next) ... -> done
+ *   loading -> deciding -> submitting -> deciding (next reel) ... -> done
+ * Like/dislike work as soon as a reel appears.
  */
-export type FeedPhase = "loading" | "watching" | "deciding" | "submitting" | "done" | "error";
+export type FeedPhase = "loading" | "deciding" | "submitting" | "done" | "error";
 
 /** Minimum time the exit animation gets before the next reel slides in. */
 const EXIT_ANIMATION_MS = 280;
@@ -37,7 +38,7 @@ export function useFeedSession() {
   // Refs mirror state for handlers that must not act on stale values (key spam, double submits).
   const phaseRef = useRef<FeedPhase>("loading");
   const sessionIdRef = useRef<string | null>(null);
-  const unlockedAtRef = useRef(0);
+  const shownAtRef = useRef(0);
   const startedRef = useRef(false);
   const pendingReactionRef = useRef<LiveEstimate["lastReaction"]>(null);
 
@@ -62,7 +63,8 @@ export function useFeedSession() {
     setUpcoming(result.upcoming);
     setPosition(result.position);
     setLastDecision(null);
-    setPhase("watching");
+    shownAtRef.current = performance.now();
+    setPhase("deciding");
   }, [router, setPhase]);
 
   const start = useCallback(async () => {
@@ -84,12 +86,6 @@ export function useFeedSession() {
     start();
   }, [start]);
 
-  const unlock = useCallback(() => {
-    if (phaseRef.current !== "watching") return;
-    unlockedAtRef.current = performance.now();
-    setPhase("deciding");
-  }, [setPhase]);
-
   const decide = useCallback(
     async (decision: Decision) => {
       if (phaseRef.current !== "deciding" || !clip) return;
@@ -99,7 +95,7 @@ export function useFeedSession() {
       const reaction = {
         clipId: clip.id,
         decision,
-        reactionMs: Math.round(performance.now() - unlockedAtRef.current),
+        reactionMs: Math.round(performance.now() - shownAtRef.current),
         position,
       };
       try {
@@ -121,7 +117,6 @@ export function useFeedSession() {
     total: REELS_PER_SESSION,
     lastDecision,
     live,
-    unlock,
     decide,
     retry: start,
   };

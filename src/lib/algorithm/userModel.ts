@@ -25,9 +25,12 @@ export function likeProbability(clip: Clip, model: UserModel): number {
   return sigmoid(LIKE_SCALE * (dot(clip.traits, model.mean) + model.bias));
 }
 
-/** Confidence weight from reaction time: instant = 1.2, 1s = 1.0, 3.5s+ = 0.5. */
+/** Decisions this fast (timed from when the reel appears) count as gut reactions. */
+const GUT_REACTION_MS = 1500;
+
+/** Confidence weight from reaction time: up to 1.5s = 1.2, 2.5s = 1.0, 5s+ = 0.5. */
 export function reactionWeight(reactionMs: number): number {
-  return clamp(1.2 - reactionMs / 5000, 0.5, 1.2);
+  return clamp(1.2 - Math.max(0, reactionMs - GUT_REACTION_MS) / 5000, 0.5, 1.2);
 }
 
 /**

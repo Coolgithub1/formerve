@@ -25,7 +25,7 @@ export type Decision = "like" | "dislike";
 export interface Reaction {
   clipId: string;
   decision: Decision;
-  /** Time from controls unlocking (3s mark) to the decision. */
+  /** Time from the reel appearing to the decision. */
   reactionMs: number;
   /** 0-based index within the session. */
   position: number;

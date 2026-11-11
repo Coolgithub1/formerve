@@ -1,18 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import type { Clip } from "@/lib/types";
-import { WATCH_LOCK_MS } from "@/lib/config";
 import { assetUrl } from "@/lib/assetUrl";
-import { WatchCountdown } from "./WatchCountdown";
 
 interface Props {
   clip: Clip;
-  /** True until the 3s watch lock has passed. */
-  locked: boolean;
   muted: boolean;
-  /** Called once the clip has actually played for WATCH_LOCK_MS. */
-  onUnlock: () => void;
 }
 
 const PLACEHOLDER_GRADIENTS = [
@@ -30,17 +24,9 @@ function gradientFor(id: string): string {
 }
 
 // Fills its 9:16 container and loops until the user decides.
-// The 3s lock starts on the video's first "playing" event, so buffering doesn't eat into it.
-// Placeholder clips (src === null) render as a colored card and start the lock on mount.
-export function ReelPlayer({ clip, locked, muted, onUnlock }: Props) {
+// Placeholder clips (src === null) render as a colored card.
+export function ReelPlayer({ clip, muted }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [playing, setPlaying] = useState(!clip.src);
-
-  useEffect(() => {
-    if (!playing) return;
-    const timer = setTimeout(onUnlock, WATCH_LOCK_MS);
-    return () => clearTimeout(timer);
-  }, [playing, onUnlock]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -64,7 +50,6 @@ export function ReelPlayer({ clip, locked, muted, onUnlock }: Props) {
           loop
           playsInline
           muted={muted}
-          onPlaying={() => setPlaying(true)}
         />
       ) : (
         <div
@@ -75,7 +60,6 @@ export function ReelPlayer({ clip, locked, muted, onUnlock }: Props) {
           <span className="text-sm opacity-70">{clip.tags.map((t) => `#${t}`).join(" ")}</span>
         </div>
       )}
-      {locked && <WatchCountdown running={playing} />}
     </div>
   );
 }
