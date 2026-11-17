@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { REELS_PER_SESSION } from "@/lib/config";
 
 export const metadata: Metadata = {
   title: "formerve",
-  description: "Scroll 40 reels. Find out your four-letter type.",
+  description: `Scroll ${REELS_PER_SESSION} reels. Find out your four-letter type.`,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

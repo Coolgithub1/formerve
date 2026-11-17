@@ -107,63 +107,51 @@ the creator's gender: a man doing a makeup tutorial still gets the `BEAUTY` weig
 
 ## 4. Every clip, with its weights and reasoning
 
-These are the 45 real TikToks in `public/clips/` (they replaced the 48 placeholders). Each one
+These are the 27 real TikToks in `public/clips/` (they replaced the 48 placeholders). Each one
 was categorized from its first frame's on-screen text, its TikTok caption where one could be
 fetched (all of p34–p45, three of p01–p33), and what the clip shows; each also has a poster image
 made from that first frame.
+
+The set is curated: 18 of the 45 downloaded clips were cut (IDs keep their gaps). Out went every
+animal clip (p07, p08, p21, p27, p33), touchy topics (p10 ADHD/autism joke, p14 "traumatizing my
+family", p44 religious joke), the weakest signals (p02, p05, p17, p24, p32, p34) and near-duplicates
+(p19, p39, p41, p45). Every axis and both gender ends still have clips.
 
 Weights are E/I, S/N, T/F, J/P, then gender, in that order (negative = I, S, T, J, guy).
 
 | ID | Clip | E/I | S/N | T/F | J/P | Gender | Categories → reasoning |
 |---|---|---|---|---|---|---|---|
 | p01 | Kafka vs Dostoevsky on overthinking | −.3 | .8 | .1 | 0 | .1 | Literary/philosophy quotes over a bookshelf: `IDEAS` (N); quiet reading scene `CALM` (I); overthinking topic `NEURO` (small F). BookTok's female skew is unsourced, so gender stays at .1 |
-| p02 | CJ studying: me core | −.1 | .3 | 0 | .1 | −.3 | Relatable meme over GTA game footage: light `ABSURD` (N); game footage uses `GAMING` (guy) at half its cap because it's a meme, not gameplay |
 | p03 | POV: experiencing life for the first time | .3 | .5 | 0 | .1 | 0 | Goofy wide-eyed supermarket bit: `ABSURD` (N), `COMEDY` (E) at cap |
 | p04 | What Sept-Dec need to sound like (study aesthetic) | −.2 | −.2 | 0 | −.6 | .5 | Whiteboard notes and laptop study setup: `ORDER` (J) at cap, light `ROUTINE` (S) and `CALM` (I); study-aesthetic inspo `INSPO` (girl) at cap |
-| p05 | Trying the lunch-in-my-city challenge | .1 | .2 | 0 | 0 | .2 | Trying a local lunch spot: light `NOVEL` (N); lifestyle food vlog, partial `INSPO` (girl) |
 | p06 | Cleaning motivation | −.1 | −.3 | 0 | −.6 | .6 | Shower and washer scrub-down: `ORDER` (J) and `ROUTINE` (S) at caps, light `CALM`; `CLEAN` (girl) at cap |
-| p07 | Cat in a belly-dance outfit | −.2 | .3 | .5 | 0 | .3 | `CUTE` (F, I at cap); dressed-up cat adds light `ABSURD` (N); `CUTE` (girl) at cap |
-| p08 | Monkey: my dreams are 37 timelines of chaos | −.1 | .5 | 0 | .1 | 0 | Nonsense dream meme: `ABSURD` (N); sleep/anxiety angle `NEURO`, small weights only |
 | p09 | Skin & hair glow-up routine | 0 | −.2 | 0 | −.3 | .8 | Juicing and face-mask glow-up: `BEAUTY` (girl) near cap; self-care routine adds light `ROUTINE` (S) and `ORDER` (J) |
-| p10 | Showed too much personality too early | .3 | .1 | 0 | .2 | 0 | Self-roast about being 'too much': `COMEDY` (E) at cap; `NEURO` small weights |
 | p11 | Bungee jump: my head MIGHT touch the water | .4 | .2 | 0 | .5 | −.4 | `THRILL` at its caps on E, N, P; `THRILL` (guy) at cap |
 | p12 | Do you have lasagna? grocery prank | .4 | 0 | −.3 | .5 | −.3 | Public prank: `CRUDE` (P, T at caps), `SOCIAL` (E); `CRUDE` (guy) at cap |
 | p13 | To go away: travel montage | .1 | .4 | 0 | .3 | .4 | Pyramids and old-town travel shots: `NOVEL` (N) at cap, light `THRILL` (P); travel inspo `INSPO` (girl) |
-| p14 | Day 12 of traumatizing my family with our whiteboard calendar | 0 | .6 | −.1 | .3 | 0 | Creepy drawings on the family calendar: unusual art `ART` (N), prank side `CRUDE` (P, light T); creepiness is `HORROR`, ≤ .1 |
 | p15 | Deep hugs | 0 | .2 | .5 | 0 | .3 | Two friends hugging by the sea: `KIND` (sentimental, F) at cap, moody shot light `MELLOW` (N); `SENTIMENT` (girl) at cap |
 | p16 | How I feel after saying ok instead of arguing back | −.2 | 0 | .3 | 0 | 0 | Choosing peace over arguing is the agreeable opposite of `DEBATE`, so F at the C cap; calm suburban scene light `CALM` (I) |
-| p17 | POV: you got close to someone out of nowhere | .2 | 0 | .2 | .1 | .2 | Opening up to a new person: `ROMANCE` (F) at its .2 cap, light `SOCIAL` (E); partial `SENTIMENT` (girl) |
 | p18 | Breakfast of my dreams | −.1 | −.3 | 0 | −.3 | .3 | Making breakfast at home: `ROUTINE` (S) at cap, light `ORDER` (J) and `CALM`; home-lifestyle `INSPO` (girl) |
-| p19 | Want to socialize but not talk, like a cat | −.5 | 0 | .1 | 0 | 0 | Liking an introvert-relatable post points to I: `CALM` near cap |
 | p20 | Our society needs human touch & connection | .3 | 0 | .5 | 0 | .3 | Street kindness experiment: `KIND` (F) at cap, crowd setting light `SOCIAL` (E); `SENTIMENT` (girl) at cap |
-| p21 | Cat vs scissors | −.2 | 0 | .6 | 0 | .3 | `CUTE` at caps on F, I and girl |
 | p22 | POV: found your exact lip shade, but darker | 0 | −.1 | 0 | 0 | .9 | Lip-liner makeup tutorial: `BEAUTY` (girl) at cap; everyday how-to, light `ROUTINE` (S) |
 | p23 | POV: you see someone from school in public | −.3 | −.2 | 0 | .1 | 0 | Hiding from an old classmate: avoiding people leans I (`CALM`); setup-and-payoff skit `PUNCHLINE` (S) |
-| p24 | Once I'm comfortable I say anything | .3 | 0 | 0 | .1 | 0 | Chatty-with-friends bit: `SOCIAL`/`COMEDY` (E) |
 | p25 | POV: social battery hits 0% without warning | −.5 | 0 | 0 | 0 | 0 | Introvert-relatable post: `CALM` (I) near cap |
 | p26 | Therapy: downhill trail ride | .3 | .1 | 0 | .5 | −.4 | Fast POV trail ride called 'therapy': `THRILL` (P at cap, E, N); `THRILL` (guy) at cap |
-| p27 | Nokia phone and the rat | 0 | .6 | 0 | .1 | 0 | Surreal nonsense meme: `ABSURD` (N) at cap |
 | p28 | Fire-escape morning setup | −.4 | .2 | 0 | .1 | .5 | Setting up a cozy spot on a city fire escape: `CALM` (I), aesthetic mood light `MELLOW` (N); cozy-aesthetic `INSPO` (girl) at cap |
 | p29 | POV: the waiter asks if everything is good | .2 | −.3 | 0 | 0 | .1 | Mouth-full-when-the-waiter-comes joke: classic `PUNCHLINE` (S); restaurant setting light `SOCIAL` (E) |
 | p30 | The biggest lesson I learned this year | −.3 | .4 | .1 | 0 | .1 | Night-time reflective quote: `MELLOW` (N .4, I at cap); emotional theme light F |
 | p31 | Best feeling: empty airport at night | −.5 | .3 | 0 | .1 | .1 | Empty terminal, quiet travel mood: `CALM` (I) near cap, light `NOVEL` (N) |
-| p32 | I will never understand Zara self-checkout | 0 | −.2 | −.1 | 0 | .4 | Everyday shopping gripe: `ROUTINE` (S), mild complaint light `DEBATE` (T); fashion shopping `INSPO` (girl) |
-| p33 | Baby orangutan close-up | −.2 | 0 | .6 | 0 | .3 | `CUTE` at caps on F, I and girl |
-| p34 | Seahorse latte art | −.2 | −.2 | 0 | −.2 | 0 | Pouring precise latte art: practical skill `ROUTINE` (S), precision light `ORDER` (J), quiet focus light `CALM` (I) |
 | p35 | Street chair I embroidered for 3 months | −.3 | .4 | 0 | −.2 | .4 | Turning a curbside chair into a designer-inspired piece: creative `ART` (N), months of patient work light `ORDER` (J), solo craft `CALM` (I); home/craft `INSPO` (girl) |
 | p36 | How to be financially free in 5 steps | 0 | −.3 | −.2 | −.6 | −.1 | Paycheck budgeting rules: planning `ORDER` (J) and practical `ROUTINE` (S) at caps; numbers-first advice light `DEBATE` (T); `FINANCE`, ≤ .1 |
 | p37 | The best time to buy 10 things so you never overpay | 0 | −.3 | −.2 | −.5 | −.1 | Buying calendar for cars, tech and seasonal stuff: `ORDER` (J) and `ROUTINE` (S); efficiency-minded light `DEBATE` (T); `FINANCE`, ≤ .1 |
 | p38 | Pushed into the dance circle with my twin | .6 | .2 | 0 | .4 | 0 | Crowded dance-circle setup: `PARTY` at caps (E, P); the game-animation payoff (Sakura School Simulator) adds light `ABSURD` (N). That game skews young and mixed, so no gender weight |
-| p39 | Slop bowl with every ingredient in my fridge | .2 | −.3 | 0 | .1 | 0 | Fridge clean-out cooking: practical `ROUTINE` (S) at cap; chatty to-camera bit light `COMEDY` (E) |
 | p40 | Post-workout slop bowl | 0 | −.3 | 0 | −.3 | −.3 | High-protein meal after training: `ROUTINE` (S) and `FITNESS` (J) at caps; `FITNESS` (guy) at cap |
-| p41 | My idea of a rich life: the garden | −.4 | .1 | 0 | 0 | .5 | Harvesting from a backyard garden: `CALM` (I), light `ROUTINE` (S) balanced by the dreamy framing; caption tags #gardeninspo: `INSPO` (girl) at cap |
 | p42 | Farmhouse kitchen: eggs and microgreens | −.3 | −.3 | 0 | −.3 | .5 | Homestead kitchen routine: tradition `ROUTINE` (S) at cap, light `ORDER` (J) and `CALM` (I); farm-life aesthetic `INSPO` (girl) at cap |
 | p43 | POV: you and your gym bro stuck to the plan | .3 | 0 | 0 | −.3 | −.3 | Training with a friend and sticking to the plan: `FITNESS` (E, J at caps); `FITNESS` (guy) at cap |
-| p44 | Jesus is his spotter | .2 | .2 | 0 | −.1 | −.3 | Gym joke about lifting with no spotter: `COMEDY` (E), light `ABSURD` (N), light `FITNESS` (J); `FITNESS` (guy) at cap |
-| p45 | 110%: you have more in you | .2 | 0 | 0 | −.3 | −.3 | Hardstyle gym-motivation edit: `FITNESS` (J at cap), hype music light `PARTY` (E); `FITNESS` (guy) at cap |
 
-**Coverage gaps in this set:** T is still thin: p12 at −.3, and the money how-tos (p36, p37) at
-−.2. S tops out at −.3. Blunt-debate and hot-take clips would help T most.
+**Coverage gaps in this set:** T is thin: p12 at −.3 and the money how-tos (p36, p37) at −.2.
+F rests on three clips (p15, p16, p20) now the animal clips are gone. S tops out at −.3.
+Blunt-debate, hot-take and kindness clips would help most.
 
 ## 5. When you add real clips
 

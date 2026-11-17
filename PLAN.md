@@ -7,7 +7,7 @@ read at the end, produced by our own algorithm.
 
 | Topic | Decision |
 |---|---|
-| Session length | **40 reels**, fixed. No timer. |
+| Session length | **Up to 40 reels**: every clip when the catalog is smaller (now **27**, a curated set). No timer. |
 | Deciding | Like/dislike work **as soon as a reel appears** (the earlier 3-second lock was removed). Clip keeps looping until the user decides. |
 | Personality model | **Four letter axes** (E/I, S/N, T/F, J/P) → a **4-letter type** with our own 16 names. Never call it "MBTI" or "Myers-Briggs" (trademarks), and don't reuse other tests' type names. |
 | Live feedback | A panel beside the feed shows the type so far and moves the four bars after every reaction, with a tag like "E +8" on each axis that moved. Can be hidden. |
@@ -56,10 +56,11 @@ Each reaction is also weighted by **when** it happened (`reactionWeight`, reason
 - snap decisions (under 1.5s) count 1.2 either way;
 - likes are U-shaped: 1.0 when liked partway through, 1.3 after a full play, 1.5 after two, then flat;
 - dislikes fall: 1.2 when instant, down to 0.6 after a full play, then flat.
-In `npm run simulate` this beats ignoring timing on the 200-clip synthetic catalog (84% vs 81% of
-letters, 49% vs 42% of full types), but only under assumed watching behavior; playtests need to
-confirm it. On the real 45 clips the strategies land within a couple of points of each other,
-because a 40-reel session shows almost every clip.
+In `npm run simulate` (27-reel sessions now), watch-time weighting gives a lower error and higher
+correlation than ignoring timing on the 200-clip synthetic catalog (11.8 vs 12.4 points, 0.81 vs 0.77),
+though letters right are level at 80%. That holds only under assumed watching behavior; playtests
+need to confirm it. On the real 27 clips every session shows every clip, so pick strategies only
+change the order and all land around 66–70% of letters, within noise.
 
 **Recommender** (`recommender.ts`). From unseen clips:
 - 70% of the time → **probe**: pick the clip whose trait vector points most at the
