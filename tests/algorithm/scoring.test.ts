@@ -78,7 +78,9 @@ describe("applyReaction", () => {
     const fast = applyReaction(emptyUserModel(), adventurous, reaction("sky", "like", 0, 200));
     const slow = applyReaction(emptyUserModel(), adventurous, reaction("sky", "like", 0, 4000));
     expect(fast.mean.intuition).toBeGreaterThan(slow.mean.intuition);
-    expect(reactionWeight(200)).toBeGreaterThan(reactionWeight(4000));
+    expect(reactionWeight({ decision: "like", reactionMs: 200 })).toBeGreaterThan(
+      reactionWeight({ decision: "like", reactionMs: 4000 }),
+    );
   });
 
   it("a user who likes everything raises their bias, not just their traits", () => {
@@ -111,5 +113,49 @@ describe("gender lean", () => {
   it("leaves the four letters alone when a clip only loads on gender", () => {
     const model = buildUserModel([reaction("beauty", "like", 0)], byId);
     expect(Object.values(model.mean).every((m) => m === 0)).toBe(true);
+  });
+});
+
+describe("watch-time weight", () => {
+  const w = (decision: "like" | "dislike", reactionMs: number, watchFraction?: number) =>
+    reactionWeight({ decision, reactionMs, watchFraction });
+
+  it("counts snap decisions strongly either way", () => {
+    expect(w("like", 800, 0.1)).toBeCloseTo(1.2);
+    expect(w("dislike", 800, 0.1)).toBeCloseTo(1.16);
+  });
+
+  it("makes likes U-shaped: snap and rewatch strong, a mid-clip like weakest", () => {
+    const snap = w("like", 1000, 0.1);
+    const midClip = w("like", 6000, 0.4);
+    const finished = w("like", 20000, 1);
+    const rewatched = w("like", 40000, 2);
+    expect(midClip).toBeCloseTo(1);
+    expect(snap).toBeGreaterThan(midClip);
+    expect(finished).toBeCloseTo(1.3);
+    expect(rewatched).toBeCloseTo(1.5);
+  });
+
+  it("levels off after two plays, since the clip keeps looping if someone walks away", () => {
+    expect(w("like", 90000, 6)).toBeCloseTo(w("like", 40000, 2));
+    expect(w("dislike", 90000, 6)).toBeCloseTo(w("dislike", 20000, 1));
+  });
+
+  it("makes dislikes weaker the longer they watched first", () => {
+    expect(w("dislike", 800, 0)).toBeGreaterThan(w("dislike", 6000, 0.5));
+    expect(w("dislike", 6000, 0.5)).toBeGreaterThan(w("dislike", 20000, 1));
+    expect(w("dislike", 20000, 1)).toBeCloseTo(0.6);
+  });
+
+  it("falls back to the snap bonus alone when there's no watch data", () => {
+    expect(w("like", 800)).toBeCloseTo(1.2);
+    expect(w("dislike", 6000)).toBeCloseTo(1);
+  });
+
+  it("moves the estimate more for a rewatched like than a mid-clip like", () => {
+    const sky = clip("sky", { intuition: 0.8 });
+    const rewatched = applyReaction(emptyUserModel(), sky, { ...reaction("sky", "like", 0, 40000), watchFraction: 2 });
+    const midClip = applyReaction(emptyUserModel(), sky, { ...reaction("sky", "like", 0, 6000), watchFraction: 0.4 });
+    expect(rewatched.mean.intuition).toBeGreaterThan(midClip.mean.intuition);
   });
 });

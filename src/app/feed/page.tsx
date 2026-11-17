@@ -50,7 +50,7 @@ export default function FeedPage() {
         <div className="relative aspect-[9/16] h-[min(78vh,750px)] overflow-hidden rounded-3xl border border-white/10 bg-neutral-900 shadow-2xl max-sm:order-first max-sm:h-[62svh] md:portrait:h-[min(58vh,1100px)]">
           {feed.clip && feed.phase !== "done" && (
             <div key={feed.clip.id + feed.position} className="reel-card absolute inset-0" data-exit={exiting ?? undefined}>
-              <ReelPlayer clip={feed.clip} muted={muted} />
+              <ReelPlayer clip={feed.clip} muted={muted} watchRef={feed.watchRef} />
             </div>
           )}
 

@@ -63,17 +63,35 @@ function fakeUser(random: () => number): FakeUser {
   return { personality: vector(() => clamp(gaussian(random) * 0.5)), bias: gaussian(random) * 0.3 };
 }
 
+// Assumed watching behavior (not measured yet; playtests should check it):
+// - torn users hesitate, so they watch more of the clip before deciding
+// - users who clearly enjoy a clip often watch it through, sometimes twice, before liking
+// - users who clearly dislike a clip mostly reject it within the first second or two
 function fakeReact(user: FakeUser, clip: Clip, random: () => number) {
   const z = TRUE_LIKE_SCALE * (dot(clip.traits, user.personality) + user.bias) + gaussian(random) * LIKE_NOISE * 4;
   const p = 1 / (1 + Math.exp(-z));
   const liked = random() < p;
-  // Confident users decide fast; torn users hesitate.
-  const reactionMs = Math.max(150, 400 + 2500 * (1 - Math.abs(2 * p - 1)) + gaussian(random) * 300);
-  return { decision: liked ? ("like" as const) : ("dislike" as const), reactionMs };
+  const durationMs = 8000 + random() * 40000;
+  const torn = 1 - Math.abs(2 * p - 1);
+  let watchedMs = Math.max(150, 400 + 2500 * torn + gaussian(random) * 300);
+  if (liked && random() < p * p) watchedMs = durationMs * (1 + random() * 1.5);
+  else if (torn > 0.6) watchedMs = durationMs * random() * 0.9;
+  return {
+    decision: liked ? ("like" as const) : ("dislike" as const),
+    reactionMs: Math.round(watchedMs),
+    watchFraction: watchedMs / durationMs,
+  };
 }
 
+/** The same reaction with its timing removed, so every reaction counts 1.0. */
+const withoutTiming = <T extends { reactionMs: number; watchFraction?: number }>(r: T) => ({
+  ...r,
+  reactionMs: 3000,
+  watchFraction: undefined,
+});
+
 // --- one strategy over many users ---
-type Strategy = { name: string; probeRatio: number | "random" };
+type Strategy = { name: string; probeRatio: number | "random"; ignoreTiming?: boolean };
 
 function evaluate(catalog: Clip[], strategy: Strategy) {
   const random = mulberry32(SEED);
@@ -94,7 +112,8 @@ function evaluate(catalog: Clip[], strategy: Strategy) {
           ? pickNextClip(catalog, model, { probeRatio: 1, topN: catalog.length, random })
           : pickNextClip(catalog, model, { probeRatio: strategy.probeRatio, random });
       if (!clip) break;
-      const reaction = fakeReact(user, clip, random);
+      const raw = fakeReact(user, clip, random);
+      const reaction = strategy.ignoreTiming ? withoutTiming(raw) : raw;
       shown++;
       if (reaction.decision === "like") likes++;
       model = applyReaction(model, clip, { clipId: clip.id, position, ...reaction });
@@ -140,11 +159,12 @@ const STRATEGIES: Strategy[] = [
   { name: "100% engage", probeRatio: 0 },
   { name: "70% probe (current)", probeRatio: 0.7 },
   { name: "100% probe", probeRatio: 1 },
+  { name: "70% probe, timing ignored", probeRatio: 0.7, ignoreTiming: true },
 ];
 
 const catalogs: [string, Clip[]][] = [
   ["Synthetic catalog (200 clips)", syntheticCatalog(200, mulberry32(SEED + 1))],
-  [`Placeholder catalog (${placeholderClips.length} clips)`, placeholderClips as Clip[]],
+  [`Real catalog, data/clips.json (${placeholderClips.length} clips)`, placeholderClips as Clip[]],
 ];
 
 console.log(`${USERS} simulated users, ${REELS_PER_SESSION} reels each\n`);

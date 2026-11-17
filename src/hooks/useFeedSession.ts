@@ -6,6 +6,7 @@ import type { AxisEstimate, Clip, Decision } from "@/lib/types";
 import { REELS_PER_SESSION } from "@/lib/config";
 import { feedSource } from "@/lib/feed";
 import { resultsUrl } from "@/lib/shareLink";
+import type { WatchStats } from "@/components/feed/ReelPlayer";
 
 /**
  * Drives the feed:
@@ -41,6 +42,7 @@ export function useFeedSession() {
   const shownAtRef = useRef(0);
   const startedRef = useRef(false);
   const pendingReactionRef = useRef<LiveEstimate["lastReaction"]>(null);
+  const watchRef = useRef<WatchStats>({ watchedSec: 0, durationSec: 0 });
 
   const setPhase = useCallback((next: FeedPhase) => {
     phaseRef.current = next;
@@ -97,6 +99,7 @@ export function useFeedSession() {
         decision,
         reactionMs: Math.round(performance.now() - shownAtRef.current),
         position,
+        ...watchFractionOf(watchRef.current),
       };
       try {
         await Promise.all([feedSource.sendReaction(sessionIdRef.current!, reaction), delay(EXIT_ANIMATION_MS)]);
@@ -115,9 +118,16 @@ export function useFeedSession() {
     upcoming,
     position,
     total: REELS_PER_SESSION,
+    watchRef,
     lastDecision,
     live,
     decide,
     retry: start,
   };
+}
+
+/** Plays watched (e.g. 1.5 = one and a half times), or nothing when the clip's length is unknown. */
+function watchFractionOf({ watchedSec, durationSec }: WatchStats): { watchFraction?: number } {
+  if (!(durationSec > 0)) return {};
+  return { watchFraction: Math.round((watchedSec / durationSec) * 100) / 100 };
 }

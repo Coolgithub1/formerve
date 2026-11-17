@@ -1,6 +1,6 @@
 import type { Clip, Reaction } from "@/lib/types";
 import { REELS_PER_SESSION, PRELOAD_COUNT } from "@/lib/config";
-import { buildUserModel } from "@/lib/algorithm/userModel";
+import { buildUserModel, reactionWeight } from "@/lib/algorithm/userModel";
 import { pickNextClip, rankClips } from "@/lib/algorithm/recommender";
 import { estimateAxes, scorePersonality } from "@/lib/algorithm/scoring";
 import clipsData from "../../../data/clips.json";
@@ -42,6 +42,10 @@ export const localSource: FeedSource = {
   },
 
   async sendReaction(sessionId, reaction) {
+    console.debug(`[feed] ${reaction.decision} after ${reaction.reactionMs}ms`, {
+      watchFraction: reaction.watchFraction,
+      weight: +reactionWeight(reaction).toFixed(2),
+    });
     reactionsFor(sessionId).push(reaction);
   },
 

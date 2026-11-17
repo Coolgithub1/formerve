@@ -157,8 +157,37 @@ and S has no strong clip (−.3 at most). Add blunt-debate, hot-take and how-to 
 4. Keep both ends of every axis covered, especially **T**, which has the fewest proven indicators.
 5. Run `npm run simulate`.
 
+## 6. Watch time: how much each reaction counts
+
+Clip weights say *what* a like means; this says *how much* one reaction counts. The player
+records how much of the clip was watched before the decision, in plays (1 = all of it once; the
+clip loops). Only time with the tab visible counts.
+
+| When they decided | Like | Dislike |
+|---|---|---|
+| Snap, under 1.5s | 1.2 | 1.2 |
+| Partway through the first play | 1.0 | 1.2 → 0.6 as they watch more |
+| After one full play | 1.3 | 0.6 |
+| After two full plays | 1.5 | 0.6 |
+| Longer | stays 1.5 | stays 0.6 |
+
+| Rule | Tier | Reasoning and source |
+|---|---|---|
+| Snap decisions count more | B | Decision time is longest when someone is torn and gets shorter the stronger the preference, in either direction (Krajbich et al.; Konovalov & Krajbich 2019). A fast like or dislike is a strong one. |
+| Finishing a clip and then liking it counts more | B | Dwell time is a standard sign of interest in recommender research (Yi et al. 2014), and YouTube trains its recommender on expected watch time (Covington et al. 2016). |
+| Rewatching counts more again, up to 1.5 | C | Replays are described as a strong signal for TikTok's feed, but mostly in second-hand write-ups, not peer-reviewed work, so the bonus is small and stops after two plays. |
+| A mid-clip like counts least | B | Here both readings agree: it wasn't a snap decision and they hadn't finished, so they were likely unsure. |
+| Long-watched dislikes count less | C | Leaving quickly is read as negative interest (Wu et al. 2021), and slow decisions mean weaker preferences. Watching it all and then disliking it could be hate-watching or hidden interest; no study separates them, so it gets low weight rather than a second bump. |
+| Stop counting after two plays | — | The clip loops until a decision, so a long watch may just mean the person walked away. |
+
 ## Sources
 
+- Konovalov & Krajbich (2019). Revealed strength of preference: inference from response times. *Judgment and Decision Making*. <https://dlab.sauder.ubc.ca/sjdm/journal/18/181101/jdm181101.html>
+- Krajbich, Bartling, Hare & Fehr (2015). Rethinking fast and slow based on a critique of reaction-time reverse inference. *Nature Communications*. <https://pmc.ncbi.nlm.nih.gov/articles/PMC4500827>
+- Yi, Hong, Zhong, Liu & Rajan (2014). Beyond clicks: dwell time for personalization. *RecSys*.
+- Covington, Adams & Sargin (2016). Deep neural networks for YouTube recommendations. *RecSys*.
+- Wu et al. (2021). Neural news recommendation with negative feedback. <https://arxiv.org/abs/2101.04328>
+- TikTok (2020). How TikTok recommends videos #ForYou. <https://newsroom.tiktok.com/en-us/how-tiktok-recommends-videos-for-you/>
 - Costa, Terracciano & McCrae (2001). Gender differences in personality traits across cultures. *JPSP*. <https://pubmed.ncbi.nlm.nih.gov/11519935/>
 - Cross, Copping & Campbell (2011). Sex differences in impulsivity: a meta-analysis. *Psychological Bulletin*. <https://research-repository.st-andrews.ac.uk/bitstream/handle/10023/2161/Cross2011PsychBullSexDifferences_WithAppendix1.pdf>
 - Cross, Cyrenne & Brown (2013). Sex differences in sensation-seeking: a meta-analysis. *Scientific Reports*. <https://www.nature.com/articles/srep02486>

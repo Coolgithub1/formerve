@@ -50,8 +50,14 @@ Example — festival crowd: `{ extraversion: 0.9, intuition: 0, feeling: 0.1, pe
 `variance` (starts high = unsure). Each reaction nudges the mean toward the clip's
 vector (like) or away from it (dislike), weighted by how strongly the clip loads
 on that trait. Variance shrinks for traits that got evidence.
-Reaction time (from the reel appearing) is a confidence weight: decisions within 1.5s
-count fully as gut reactions, slower ones gradually less (down to half weight at 5s+).
+Each reaction is also weighted by **when** it happened (`reactionWeight`, reasoning in
+`data/TAGGING.md` section 6). The player counts how much of the clip was actually watched
+(loops included, hidden-tab time excluded):
+- snap decisions (under 1.5s) count 1.2 either way;
+- likes are U-shaped: 1.0 when liked partway through, 1.3 after a full play, 1.5 after two, then flat;
+- dislikes fall: 1.2 when instant, down to 0.6 after a full play, then flat.
+In `npm run simulate` this beats ignoring timing (33 real clips: 70% vs 67% of letters, 26% vs 19%
+of full types), but only under assumed watching behavior; playtests need to confirm it.
 
 **Recommender** (`recommender.ts`). From unseen clips:
 - 70% of the time → **probe**: pick the clip whose trait vector points most at the

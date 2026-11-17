@@ -35,6 +35,12 @@ export interface Reaction {
   decision: Decision;
   /** Time from the reel appearing to the decision. */
   reactionMs: number;
+  /**
+   * How much of the clip was actually watched before deciding, in plays: 0.5 = half, 1 = all of it
+   * once, 2 = watched it twice (the clip loops). Only counts time the tab was visible. Missing when
+   * the clip has no video (placeholders) or its length is unknown.
+   */
+  watchFraction?: number;
   /** 0-based index within the session. */
   position: number;
 }

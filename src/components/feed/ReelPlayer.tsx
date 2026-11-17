@@ -1,13 +1,24 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type MutableRefObject } from "react";
 import type { Clip } from "@/lib/types";
 import { assetUrl } from "@/lib/assetUrl";
+
+/** Seconds of the clip actually watched (loops included, hidden-tab time excluded) and its length. */
+export interface WatchStats {
+  watchedSec: number;
+  durationSec: number;
+}
 
 interface Props {
   clip: Clip;
   muted: boolean;
+  /** Filled in while the clip plays; reset when a new clip mounts. */
+  watchRef?: MutableRefObject<WatchStats>;
 }
+
+/** timeupdate fires about every 250ms; a bigger jump is a seek or a stall, not watching. */
+const MAX_TICK_SEC = 1.5;
 
 const PLACEHOLDER_GRADIENTS = [
   "from-indigo-600 to-fuchsia-700",
@@ -25,8 +36,24 @@ function gradientFor(id: string): string {
 
 // Fills its 9:16 container and loops until the user decides.
 // Placeholder clips (src === null) render as a colored card.
-export function ReelPlayer({ clip, muted }: Props) {
+export function ReelPlayer({ clip, muted, watchRef }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const lastTimeRef = useRef(0);
+
+  useEffect(() => {
+    if (watchRef) watchRef.current = { watchedSec: 0, durationSec: 0 };
+    lastTimeRef.current = 0;
+  }, [clip.id, watchRef]);
+
+  const onTimeUpdate = () => {
+    const video = videoRef.current;
+    if (!video || !watchRef) return;
+    const now = video.currentTime;
+    // When the clip loops, currentTime jumps back to ~0; count from the start of the new play.
+    const tick = now >= lastTimeRef.current ? now - lastTimeRef.current : now;
+    lastTimeRef.current = now;
+    if (tick <= MAX_TICK_SEC && document.visibilityState === "visible") watchRef.current.watchedSec += tick;
+  };
 
   useEffect(() => {
     const video = videoRef.current;
@@ -49,6 +76,10 @@ export function ReelPlayer({ clip, muted }: Props) {
           className={`h-full w-full bg-black ${clip.fit === "contain" ? "object-contain" : "object-cover"}`}
           loop
           playsInline
+          onLoadedMetadata={(e) => {
+            if (watchRef) watchRef.current.durationSec = e.currentTarget.duration || 0;
+          }}
+          onTimeUpdate={onTimeUpdate}
           muted={muted}
         />
       ) : (
