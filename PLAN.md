@@ -56,8 +56,10 @@ Each reaction is also weighted by **when** it happened (`reactionWeight`, reason
 - snap decisions (under 1.5s) count 1.2 either way;
 - likes are U-shaped: 1.0 when liked partway through, 1.3 after a full play, 1.5 after two, then flat;
 - dislikes fall: 1.2 when instant, down to 0.6 after a full play, then flat.
-In `npm run simulate` this beats ignoring timing (33 real clips: 70% vs 67% of letters, 26% vs 19%
-of full types), but only under assumed watching behavior; playtests need to confirm it.
+In `npm run simulate` this beats ignoring timing on the 200-clip synthetic catalog (84% vs 81% of
+letters, 49% vs 42% of full types), but only under assumed watching behavior; playtests need to
+confirm it. On the real 45 clips the strategies land within a couple of points of each other,
+because a 40-reel session shows almost every clip.
 
 **Recommender** (`recommender.ts`). From unseen clips:
 - 70% of the time → **probe**: pick the clip whose trait vector points most at the

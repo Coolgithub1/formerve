@@ -1,6 +1,6 @@
 # formerve
 
-Scroll up to 40 reels (currently 33 real TikToks), like or dislike each one, and get your
+Scroll up to 40 reels (currently 45 real TikToks), like or dislike each one, and get your
 four-letter personality type at the end, plus a separate guy/girl lean, with the bars updating live as you go.
 See [PLAN.md](PLAN.md) for the design and decisions.
 

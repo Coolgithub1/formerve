@@ -75,6 +75,7 @@ applies to that axis.
 | `ROMANCE` | Romance, love stories | F up to .2 | — | Film studies disagree on direction, so it carries almost no weight. |
 | `DEBATE` | Blunt debates, hot takes, harsh honest reviews | T up to .3 | C | Thinking ≈ low agreeableness (McCrae & Costa 1989); bluntness and argument are low-agreeableness behaviors. No direct video study, so capped at C. **T has the fewest proven indicators.** |
 | `ORDER` | Organizing, cleaning, planners, routines, minimalist/ordered spaces | J up to .6 | B | Need for structure ↔ preferring ordered, symmetrical images (Van Geert et al.); neatness is one of the clearest signs of conscientiousness in people's rooms (Gosling et al. 2002). |
+| `FITNESS` | Gym, training, workout motivation, protein meals | J up to .3; E up to .3 | C | People higher in conscientiousness (r = .20) and extraversion (r = .23) are more physically active (Rhodes & Smith 2006; Sutin et al. 2016, 125,000+ people). That's about *doing* exercise; applying it to *liking gym videos* is an inference, so C. |
 | `HORROR` | Horror, morbid topics | ≤ .1 on any axis | — | Results conflict: sensation seeking predicted horror enjoyment in older work but not in Kiss et al. 2024; one film study even links horror to *higher* agreeableness. |
 | `DARK` | Dark humor | none | — | Linked to intelligence and lower aggression (Willinger et al. 2017), not to any of the four letters. |
 | `NEURO` | Anxiety, overthinking, mental-health content | ≤ .3 | — | Relates to neuroticism, which these four letters don't measure. Small weights only. |
@@ -100,13 +101,16 @@ the creator's gender: a man doing a makeup tutorial still gets the `BEAUTY` weig
 | `GAMING` | Gaming and game footage | guy up to .6 | B | Gaming is 51% of YouTube views by men aged 18–34 (OpenSlate). Memes that only borrow game footage get about half. |
 | `THRILL` | Extreme sports, speed, danger | guy up to .4 | B | Men score higher on sensation seeking: d = 0.41 (Cross, Copping & Campbell 2011), d = 0.46 on the SSS-V (Cross, Cyrenne & Brown 2013). A moderate effect, so .4. |
 | `CRUDE` | Pranks, roasts | guy up to .3 | C | Disinhibition is part of sensation seeking (above); its link to prank humor is inferred. |
+| `FITNESS` | Gym, lifting, gym humor and motivation | guy up to .3 | C | Gym, sport, fashion and dating content was the biggest share (38%) of what 142 young men watched on TikTok (The Conversation study). But individual fitness creators' audiences range from about 18% to 82% female (Modash), so the lean is real but modest. |
+| `FINANCE` | Money tips, budgeting, deals | ±.1 at most | — | Finance TikTok is mostly made by young men (Business Insider), but no audience-by-gender data was found, and creator gender doesn't count. |
 | everything else | Memes, relatable skits, quotes, calm scenes | 0 to ±.1 | — | No usable evidence of a gender gap. |
 
 ## 4. Every clip, with its weights and reasoning
 
-These are the 33 real TikToks in `public/clips/` (they replaced the 48 placeholders). Each one
-was categorized from its first frame's on-screen text plus what the clip shows; each also has a
-poster image made from that first frame.
+These are the 45 real TikToks in `public/clips/` (they replaced the 48 placeholders). Each one
+was categorized from its first frame's on-screen text, its TikTok caption where one could be
+fetched (all of p34–p45, three of p01–p33), and what the clip shows; each also has a poster image
+made from that first frame.
 
 Weights are E/I, S/N, T/F, J/P, then gender, in that order (negative = I, S, T, J, guy).
 
@@ -145,9 +149,21 @@ Weights are E/I, S/N, T/F, J/P, then gender, in that order (negative = I, S, T, 
 | p31 | Best feeling: empty airport at night | −.5 | .3 | 0 | .1 | .1 | Empty terminal, quiet travel mood: `CALM` (I) near cap, light `NOVEL` (N) |
 | p32 | I will never understand Zara self-checkout | 0 | −.2 | −.1 | 0 | .4 | Everyday shopping gripe: `ROUTINE` (S), mild complaint light `DEBATE` (T); fashion shopping `INSPO` (girl) |
 | p33 | Baby orangutan close-up | −.2 | 0 | .6 | 0 | .3 | `CUTE` at caps on F, I and girl |
+| p34 | Seahorse latte art | −.2 | −.2 | 0 | −.2 | 0 | Pouring precise latte art: practical skill `ROUTINE` (S), precision light `ORDER` (J), quiet focus light `CALM` (I) |
+| p35 | Street chair I embroidered for 3 months | −.3 | .4 | 0 | −.2 | .4 | Turning a curbside chair into a designer-inspired piece: creative `ART` (N), months of patient work light `ORDER` (J), solo craft `CALM` (I); home/craft `INSPO` (girl) |
+| p36 | How to be financially free in 5 steps | 0 | −.3 | −.2 | −.6 | −.1 | Paycheck budgeting rules: planning `ORDER` (J) and practical `ROUTINE` (S) at caps; numbers-first advice light `DEBATE` (T); `FINANCE`, ≤ .1 |
+| p37 | The best time to buy 10 things so you never overpay | 0 | −.3 | −.2 | −.5 | −.1 | Buying calendar for cars, tech and seasonal stuff: `ORDER` (J) and `ROUTINE` (S); efficiency-minded light `DEBATE` (T); `FINANCE`, ≤ .1 |
+| p38 | Pushed into the dance circle with my twin | .6 | .2 | 0 | .4 | 0 | Crowded dance-circle setup: `PARTY` at caps (E, P); the game-animation payoff (Sakura School Simulator) adds light `ABSURD` (N). That game skews young and mixed, so no gender weight |
+| p39 | Slop bowl with every ingredient in my fridge | .2 | −.3 | 0 | .1 | 0 | Fridge clean-out cooking: practical `ROUTINE` (S) at cap; chatty to-camera bit light `COMEDY` (E) |
+| p40 | Post-workout slop bowl | 0 | −.3 | 0 | −.3 | −.3 | High-protein meal after training: `ROUTINE` (S) and `FITNESS` (J) at caps; `FITNESS` (guy) at cap |
+| p41 | My idea of a rich life: the garden | −.4 | .1 | 0 | 0 | .5 | Harvesting from a backyard garden: `CALM` (I), light `ROUTINE` (S) balanced by the dreamy framing; caption tags #gardeninspo: `INSPO` (girl) at cap |
+| p42 | Farmhouse kitchen: eggs and microgreens | −.3 | −.3 | 0 | −.3 | .5 | Homestead kitchen routine: tradition `ROUTINE` (S) at cap, light `ORDER` (J) and `CALM` (I); farm-life aesthetic `INSPO` (girl) at cap |
+| p43 | POV: you and your gym bro stuck to the plan | .3 | 0 | 0 | −.3 | −.3 | Training with a friend and sticking to the plan: `FITNESS` (E, J at caps); `FITNESS` (guy) at cap |
+| p44 | Jesus is his spotter | .2 | .2 | 0 | −.1 | −.3 | Gym joke about lifting with no spotter: `COMEDY` (E), light `ABSURD` (N), light `FITNESS` (J); `FITNESS` (guy) at cap |
+| p45 | 110%: you have more in you | .2 | 0 | 0 | −.3 | −.3 | Hardstyle gym-motivation edit: `FITNESS` (J at cap), hype music light `PARTY` (E); `FITNESS` (guy) at cap |
 
-**Coverage gaps in this set:** T has one real indicator (p12, plus light touches in p14 and p32),
-and S has no strong clip (−.3 at most). Add blunt-debate, hot-take and how-to clips next.
+**Coverage gaps in this set:** T is still thin: p12 at −.3, and the money how-tos (p36, p37) at
+−.2. S tops out at −.3. Blunt-debate and hot-take clips would help T most.
 
 ## 5. When you add real clips
 
@@ -188,6 +204,11 @@ clip loops). Only time with the tab visible counts.
 - Covington, Adams & Sargin (2016). Deep neural networks for YouTube recommendations. *RecSys*.
 - Wu et al. (2021). Neural news recommendation with negative feedback. <https://arxiv.org/abs/2101.04328>
 - TikTok (2020). How TikTok recommends videos #ForYou. <https://newsroom.tiktok.com/en-us/how-tiktok-recommends-videos-for-you/>
+- Rhodes & Smith (2006). Personality correlates of physical activity: a review and meta-analysis. *British Journal of Sports Medicine*. <https://pmc.ncbi.nlm.nih.gov/articles/PMC2577457>
+- Sutin et al. (2016). The five-factor model of personality and physical inactivity: a meta-analysis of 16 samples. <https://pmc.ncbi.nlm.nih.gov/articles/PMC5650243>
+- The Conversation, via Women's Agenda (2026). What 142 men's TikTok histories reveal. <https://womensagenda.com.au/latest/we-analysed-the-tiktok-history-of-142-men-to-learn-about-the-manosphere/>
+- Modash. Male fitness influencers on TikTok, with audience gender splits. <https://www.modash.io/find-influencers/tiktok/fitness/male>
+- Business Insider (2021). Finance TikTok and bro culture. <https://www.businessinsider.in/stock-market/news/from-wallstreetbets-to-tiktok-finance-is-still-all-about-bro-culture-but-a-fintok-financial-feminist-and-her-over-150000-followers-are-trying-to-change-that/articleshow/83064090.cms>
 - Costa, Terracciano & McCrae (2001). Gender differences in personality traits across cultures. *JPSP*. <https://pubmed.ncbi.nlm.nih.gov/11519935/>
 - Cross, Copping & Campbell (2011). Sex differences in impulsivity: a meta-analysis. *Psychological Bulletin*. <https://research-repository.st-andrews.ac.uk/bitstream/handle/10023/2161/Cross2011PsychBullSexDifferences_WithAppendix1.pdf>
 - Cross, Cyrenne & Brown (2013). Sex differences in sensation-seeking: a meta-analysis. *Scientific Reports*. <https://www.nature.com/articles/srep02486>
