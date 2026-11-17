@@ -1,5 +1,7 @@
 # ScrollMi
 
+**Try it live: <https://coolgithub1.github.io/formerve/>**
+
 Scroll up to 40 reels (currently 27 curated TikToks), like or dislike each one, and get your
 four-letter personality type at the end, plus a separate guy/girl lean, with the bars updating live as you go.
 See [PLAN.md](PLAN.md) for the design and decisions.
