@@ -10,7 +10,10 @@ export type PickMode = "probe" | "engage";
  */
 export function probeScore(clip: Clip, model: UserModel): number {
   const p = likeProbability(clip, model);
-  const uncertainty = TRAITS.reduce((sum, t) => sum + clip.traits[t] ** 2 * model.variance[t], model.biasVariance);
+  const uncertainty = TRAITS.reduce(
+    (sum, t) => sum + clip.traits[t] ** 2 * model.variance[t],
+    model.biasVariance + (clip.gender ?? 0) ** 2 * model.genderVariance,
+  );
   return p * (1 - p) * uncertainty;
 }
 

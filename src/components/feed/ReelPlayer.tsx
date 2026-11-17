@@ -46,7 +46,7 @@ export function ReelPlayer({ clip, muted }: Props) {
           ref={videoRef}
           src={assetUrl(clip.src)}
           poster={clip.poster && assetUrl(clip.poster)}
-          className="h-full w-full object-cover"
+          className={`h-full w-full bg-black ${clip.fit === "contain" ? "object-contain" : "object-cover"}`}
           loop
           playsInline
           muted={muted}

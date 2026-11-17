@@ -18,6 +18,14 @@ export interface Clip {
   tags: string[];
   /** How strongly liking this clip signals each axis. */
   traits: TraitVector;
+  /**
+   * How strongly liking this clip signals the viewer's gender, in [-1, 1]:
+   * negative = guy-leaning audience, positive = girl-leaning. Tracked apart from the
+   * four letters and never part of the type code. Missing = 0. See data/TAGGING.md.
+   */
+  gender?: number;
+  /** "contain" for clips that aren't 9:16 (landscape/square), so their on-screen text isn't cropped. */
+  fit?: "cover" | "contain";
 }
 
 export type Decision = "like" | "dislike";
@@ -38,6 +46,9 @@ export interface UserModel {
   /** General tendency to like things, so "likes everything" users don't skew their axes. */
   bias: number;
   biasVariance: number;
+  /** Gender lean estimate in [-1, 1] (negative = guy, positive = girl) and its uncertainty. */
+  genderMean: number;
+  genderVariance: number;
   seenClipIds: Set<string>;
 }
 
@@ -55,6 +66,13 @@ export interface AxisEstimate {
   scores: Record<Trait, number>;
   /** Likely range per axis (0–100), from how unsure the model still is. */
   ranges: Record<Trait, [number, number]>;
+  /** 0–100 gender lean (0 = guy, 100 = girl) and its likely range. Optional so older share links still open. */
+  gender?: GenderEstimate;
+}
+
+export interface GenderEstimate {
+  score: number;
+  range: [number, number];
 }
 
 export interface PersonalityResult extends AxisEstimate {

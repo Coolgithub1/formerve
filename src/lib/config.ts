@@ -1,6 +1,9 @@
 // Tunable session + algorithm constants. See PLAN.md for the reasoning.
 
-export const REELS_PER_SESSION = 40;
+import clips from "../../data/clips.json";
+
+/** 40 reels, or every clip when the catalog is smaller than that. */
+export const REELS_PER_SESSION = Math.min(40, clips.length);
 
 /** Share of picks that probe uncertain traits (the rest match current likes). */
 export const PROBE_RATIO = 0.7;

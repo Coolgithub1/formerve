@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import clips from "../data/clips.json";
@@ -10,8 +10,8 @@ const num = (s: string) => Number(s.trim().replace("−", "-"));
 
 const guideRows = new Map<string, number[]>();
 for (const line of md.split("\n")) {
-  const m = line.match(/^\| (p\d\d) \|[^|]*\|([^|]*)\|([^|]*)\|([^|]*)\|([^|]*)\|/);
-  if (m) guideRows.set(m[1], [m[2], m[3], m[4], m[5]].map(num));
+  const m = line.match(/^\| (p\d\d) \|[^|]*\|([^|]*)\|([^|]*)\|([^|]*)\|([^|]*)\|([^|]*)\|/);
+  if (m) guideRows.set(m[1], [m[2], m[3], m[4], m[5], m[6]].map(num));
 }
 
 describe("data/TAGGING.md", () => {
@@ -22,13 +22,23 @@ describe("data/TAGGING.md", () => {
   it("lists the same weights as clips.json", () => {
     for (const clip of clips) {
       const t = clip.traits;
-      expect(guideRows.get(clip.id), clip.id).toEqual([t.extraversion, t.intuition, t.feeling, t.perceiving]);
+      expect(guideRows.get(clip.id), clip.id).toEqual([t.extraversion, t.intuition, t.feeling, t.perceiving, clip.gender ?? 0]);
     }
   });
 
   it("never exceeds the strongest tier's cap of 0.9", () => {
     for (const clip of clips) {
-      for (const w of Object.values(clip.traits)) expect(Math.abs(w)).toBeLessThanOrEqual(0.9);
+      for (const w of [...Object.values(clip.traits), clip.gender ?? 0]) expect(Math.abs(w)).toBeLessThanOrEqual(0.9);
+    }
+  });
+});
+
+describe("clip files", () => {
+  it("has a video and poster on disk for every real clip", () => {
+    for (const clip of clips as { src: string | null; poster?: string }[]) {
+      if (!clip.src) continue;
+      expect(existsSync(path.resolve(__dirname, "../public" + clip.src)), clip.src).toBe(true);
+      if (clip.poster) expect(existsSync(path.resolve(__dirname, "../public" + clip.poster)), clip.poster).toBe(true);
     }
   });
 });

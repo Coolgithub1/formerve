@@ -84,6 +84,8 @@ export function LiveTypePanel({ live, position, onHide, className }: Props) {
         })}
       </ul>
 
+      <GenderRow live={live} position={position} />
+
       <p className="mt-5 min-h-10 text-xs leading-relaxed opacity-60">
         {live?.lastReaction ? (
           <>
@@ -94,5 +96,35 @@ export function LiveTypePanel({ live, position, onHide, className }: Props) {
         )}
       </p>
     </aside>
+  );
+}
+
+// Separate from the four letters: which way the viewer's likes lean, guy (left) to girl (right).
+function GenderRow({ live, position }: { live: LiveEstimate | null; position: number }) {
+  const score = live?.estimate.gender?.score ?? 50;
+  const prev = live?.previous?.gender?.score;
+  const delta = prev === undefined ? 0 : score - prev;
+  return (
+    <div className="mt-5 border-t border-white/10 pt-4">
+      <div className="mb-1.5 flex h-5 items-center justify-between text-xs">
+        <span className="opacity-50">Gender lean</span>
+        {delta !== 0 && (
+          <span key={`gender-${position}`} className="live-change rounded-full bg-white/15 px-2 py-0.5 font-semibold tabular-nums">
+            {delta > 0 ? "Girl" : "Guy"} +{Math.abs(delta)}
+          </span>
+        )}
+      </div>
+      <div className="flex items-center gap-2">
+        <span className={`w-8 text-center text-xs font-bold ${score < 50 ? "" : "opacity-30"}`}>Guy</span>
+        <div className="relative h-2 flex-1 rounded-full bg-white/10">
+          <div className="absolute inset-y-0 left-1/2 w-px bg-white/25" />
+          <div
+            className="absolute top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-pink-300 shadow transition-[left] duration-500 ease-out"
+            style={{ left: `${score}%` }}
+          />
+        </div>
+        <span className={`w-8 text-center text-xs font-bold ${score > 50 ? "" : "opacity-30"}`}>Girl</span>
+      </div>
+    </div>
   );
 }

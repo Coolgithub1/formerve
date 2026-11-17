@@ -91,3 +91,25 @@ describe("applyReaction", () => {
     expect(Math.abs(model.mean.intuition)).toBeLessThan(model.bias);
   });
 });
+
+describe("gender lean", () => {
+  const beauty = { ...clip("beauty", {}), gender: 0.9 };
+  const thrill = { ...clip("thrill", { perceiving: 0.5 }), gender: -0.4 };
+  const byId = new Map([beauty, thrill].map((c) => [c.id, c]));
+
+  it("starts in the middle", () => {
+    expect(scorePersonality(emptyUserModel(), []).gender?.score).toBe(50);
+  });
+
+  it("moves toward girl after liking a girl-leaning clip and toward guy after liking a guy-leaning one", () => {
+    const girl = buildUserModel([reaction("beauty", "like", 0), reaction("thrill", "dislike", 1)], byId);
+    const guy = buildUserModel([reaction("beauty", "dislike", 0), reaction("thrill", "like", 1)], byId);
+    expect(scorePersonality(girl, []).gender!.score).toBeGreaterThan(50);
+    expect(scorePersonality(guy, []).gender!.score).toBeLessThan(50);
+  });
+
+  it("leaves the four letters alone when a clip only loads on gender", () => {
+    const model = buildUserModel([reaction("beauty", "like", 0)], byId);
+    expect(Object.values(model.mean).every((m) => m === 0)).toBe(true);
+  });
+});

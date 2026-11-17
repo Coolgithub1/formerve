@@ -4,6 +4,7 @@ import { codeFromScores, typeByCode } from "@/lib/algorithm/personalityTypes";
 // There's no server, so a results link carries the result itself:
 //   /results/?t=INFP&s=4-98-67-66&r=0.12-88.100-54.80-52.79&n=14-40
 //   t = type code, s = score per axis, r = likely range per axis (low.high), n = liked-total
+//   g = gender lean score.low.high (0 = guy, 100 = girl); optional, older links have none
 // Anyone can open it and see the same page. Someone could hand-edit it to fake a
 // result, which doesn't matter for a fun quiz.
 
@@ -14,6 +15,7 @@ export function resultsUrl(result: PersonalityResult): string {
     r: TRAITS.map((t) => result.ranges[t].join(".")).join("-"),
     n: `${result.liked}-${result.total}`,
   });
+  if (result.gender) params.set("g", [result.gender.score, ...result.gender.range].join("."));
   return `/results/?${params}`;
 }
 
@@ -31,6 +33,15 @@ export function decodeResult(params: URLSearchParams): PersonalityResult | null 
   if (!ranges.every((r, i) => r.length === 2 && r.every(isScore) && r[0] <= scores[i] && scores[i] <= r[1])) return null;
   if (!Number.isInteger(liked) || !Number.isInteger(total) || liked < 0 || liked > total) return null;
 
+  // Gender is optional; when present it must be well-formed like the axes.
+  let gender: PersonalityResult["gender"];
+  const g = params.get("g");
+  if (g !== null) {
+    const [score, low, high] = g.split(".").map(Number);
+    if (g.split(".").length !== 3 || ![score, low, high].every(isScore) || !(low <= score && score <= high)) return null;
+    gender = { score, range: [low, high] };
+  }
+
   const scoreMap = Object.fromEntries(TRAITS.map((t, i) => [t, scores[i]])) as Record<Trait, number>;
   if (codeFromScores(scoreMap) !== type.code) return null; // letters must match the bars
 
@@ -40,5 +51,6 @@ export function decodeResult(params: URLSearchParams): PersonalityResult | null 
     ranges: Object.fromEntries(TRAITS.map((t, i) => [t, ranges[i] as [number, number]])) as Record<Trait, [number, number]>,
     liked,
     total,
+    ...(gender && { gender }),
   };
 }

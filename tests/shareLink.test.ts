@@ -20,6 +20,12 @@ describe("share links", () => {
     expect(decodeResult(paramsOf(url))).toEqual(result);
   });
 
+  it("round-trips the gender lean, and still opens older links without it", () => {
+    const withGender: PersonalityResult = { ...result, gender: { score: 72, range: [60, 84] } };
+    expect(decodeResult(paramsOf(resultsUrl(withGender)))).toEqual(withGender);
+    expect(decodeResult(paramsOf(resultsUrl(result)))?.gender).toBeUndefined();
+  });
+
   it("rejects links with missing or mangled parts", () => {
     const good = paramsOf(resultsUrl(result));
     const broken = (key: string, value: string | null) => {
@@ -37,5 +43,7 @@ describe("share links", () => {
     expect(broken("r", "10.12-88.100-54.80-52.79")).toBeNull(); // score outside its range
     expect(broken("n", "41-40")).toBeNull();
     expect(broken("n", null)).toBeNull();
+    expect(broken("g", "70.80.90")).toBeNull(); // gender score outside its range
+    expect(broken("g", "70.60")).toBeNull();
   });
 });

@@ -16,13 +16,15 @@ export function emptyUserModel(): UserModel {
     variance: fillVector(PRIOR_VARIANCE),
     bias: 0,
     biasVariance: PRIOR_VARIANCE,
+    genderMean: 0,
+    genderVariance: PRIOR_VARIANCE,
     seenClipIds: new Set(),
   };
 }
 
 /** Predicted chance this user likes the clip, given the current estimate. */
 export function likeProbability(clip: Clip, model: UserModel): number {
-  return sigmoid(LIKE_SCALE * (dot(clip.traits, model.mean) + model.bias));
+  return sigmoid(LIKE_SCALE * (dot(clip.traits, model.mean) + (clip.gender ?? 0) * model.genderMean + model.bias));
 }
 
 /** Decisions this fast (timed from when the reel appears) count as gut reactions. */
@@ -36,11 +38,14 @@ export function reactionWeight(reactionMs: number): number {
 /**
  * Applies one reaction (returns a new model).
  *
- * The model is a Bayesian logistic regression: P(like) = sigmoid(LIKE_SCALE * (clip . traits + bias)),
+ * The model is a Bayesian logistic regression:
+ *   P(like) = sigmoid(LIKE_SCALE * (clip . traits + clip.gender * genderMean + bias)),
  * with an independent Gaussian belief per trait. Each reaction is one Newton step:
  * - variance shrinks on the traits this clip loads on (more so when the outcome was uncertain)
  * - mean moves by (surprise x loading x variance), so surprising reactions on uncertain
  *   traits move the estimate most, and expected ones barely move it.
+ * Gender is a fifth term in the same regression, so a like on a girl-leaning cleaning clip
+ * is shared between "girl" and "J" instead of all being read as J.
  */
 export function applyReaction(model: UserModel, clip: Clip, reaction: Reaction): UserModel {
   const liked = reaction.decision === "like" ? 1 : 0;
@@ -56,10 +61,21 @@ export function applyReaction(model: UserModel, clip: Clip, reaction: Reaction):
     variance[t] = 1 / (1 / model.variance[t] + curvature * x * x);
     mean[t] = clamp(model.mean[t] + weight * variance[t] * LIKE_SCALE * surprise * x, -1, 1);
   }
+  const g = clip.gender ?? 0;
+  const genderVariance = 1 / (1 / model.genderVariance + curvature * g * g);
+  const genderMean = clamp(model.genderMean + weight * genderVariance * LIKE_SCALE * surprise * g, -1, 1);
   const biasVariance = 1 / (1 / model.biasVariance + curvature);
   const bias = clamp(model.bias + weight * biasVariance * LIKE_SCALE * surprise, -1, 1);
 
-  return { mean, variance, bias, biasVariance, seenClipIds: new Set(model.seenClipIds).add(clip.id) };
+  return {
+    mean,
+    variance,
+    bias,
+    biasVariance,
+    genderMean,
+    genderVariance,
+    seenClipIds: new Set(model.seenClipIds).add(clip.id),
+  };
 }
 
 /** Rebuilds the model from a session's stored reactions, in position order. */

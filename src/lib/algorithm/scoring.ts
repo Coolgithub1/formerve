@@ -1,4 +1,4 @@
-import { TRAITS, type AxisEstimate, type PersonalityResult, type Reaction, type Trait, type UserModel } from "@/lib/types";
+import { TRAITS, type AxisEstimate, type GenderEstimate, type PersonalityResult, type Reaction, type Trait, type UserModel } from "@/lib/types";
 import { codeFromScores, typeByCode } from "./personalityTypes";
 
 /** Maps a mean in [-1, 1] to a 0–100 display score. */
@@ -20,7 +20,16 @@ export function estimateAxes(model: UserModel): AxisEstimate {
     scores[t] = toDisplayScore(model.mean[t]);
     ranges[t] = [toDisplayScore(model.mean[t] - sd), toDisplayScore(model.mean[t] + sd)];
   }
-  return { scores, ranges };
+  return { scores, ranges, gender: estimateGender(model) };
+}
+
+/** Gender lean as 0–100 (0 = guy, 100 = girl) with a likely range, same scale as the axes. */
+export function estimateGender(model: UserModel): GenderEstimate {
+  const sd = Math.sqrt(model.genderVariance);
+  return {
+    score: toDisplayScore(model.genderMean),
+    range: [toDisplayScore(model.genderMean - sd), toDisplayScore(model.genderMean + sd)],
+  };
 }
 
 export function scorePersonality(model: UserModel, reactions: Reaction[]): PersonalityResult {

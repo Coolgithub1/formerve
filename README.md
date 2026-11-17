@@ -1,7 +1,7 @@
 # formerve
 
-Scroll 40 reels, like or dislike each one, and get your
-four-letter personality type at the end, with the bars updating live as you go.
+Scroll up to 40 reels (currently 33 real TikToks), like or dislike each one, and get your
+four-letter personality type at the end, plus a separate guy/girl lean, with the bars updating live as you go.
 See [PLAN.md](PLAN.md) for the design and decisions.
 
 It's a plain static site: everything runs in the visitor's browser, nothing is
@@ -28,7 +28,9 @@ This writes the whole site to `out/`. Upload that folder to any static host
 ## Adding real clips
 
 1. Put vertical (9:16) videos in `public/clips/`.
-2. In `data/clips.json`, set each clip's `src` (e.g. `"/clips/skydive.mp4"`), tags, and its four axis values.
+2. In `data/clips.json`, set each clip's `src` (e.g. `"/clips/skydive.mp4"`), `poster`, tags, its four axis
+   values, and its `gender` value (−1 guy-leaning to +1 girl-leaning; see `data/TAGGING.md` section 3b).
+   Add `"fit": "contain"` for clips that aren't 9:16 so their text isn't cropped.
 
 Clips with `"src": null` show as colored placeholder cards.
 
