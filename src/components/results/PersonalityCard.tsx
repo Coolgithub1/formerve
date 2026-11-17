@@ -3,9 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import type { PersonalityResult } from "@/lib/types";
+import { InstagramShareButton } from "./InstagramShareButton";
 
 // The big reveal: four-letter code, type name, description, share + retake.
-// TODO: optional image export of this card for sharing to stories.
 export function PersonalityCard({ result }: { result: PersonalityResult }) {
   const { type } = result;
   const [copied, setCopied] = useState(false);
@@ -39,6 +39,7 @@ export function PersonalityCard({ result }: { result: PersonalityResult }) {
           >
             {copied ? "Link copied!" : "Share result"}
           </button>
+          <InstagramShareButton result={result} />
           <Link
             href="/feed"
             className="rounded-full border border-white/40 px-5 py-2.5 font-semibold transition hover:bg-white/10"
