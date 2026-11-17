@@ -3,7 +3,7 @@ import "./globals.css";
 import { REELS_PER_SESSION } from "@/lib/config";
 
 export const metadata: Metadata = {
-  title: "formerve",
+  title: "ScrollMi",
   description: `Scroll ${REELS_PER_SESSION} reels. Find out your four-letter type.`,
 };
 

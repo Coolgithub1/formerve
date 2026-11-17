@@ -1,4 +1,4 @@
-# formerve — Plan
+# ScrollMi — Plan
 
 Scroll through short-form reels, like or dislike each one, and get a personality
 read at the end, produced by our own algorithm.

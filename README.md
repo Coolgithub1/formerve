@@ -1,4 +1,4 @@
-# formerve
+# ScrollMi
 
 Scroll up to 40 reels (currently 27 curated TikToks), like or dislike each one, and get your
 four-letter personality type at the end, plus a separate guy/girl lean, with the bars updating live as you go.

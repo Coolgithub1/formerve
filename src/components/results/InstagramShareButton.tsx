@@ -23,7 +23,7 @@ export function InstagramShareButton({ result }: { result: PersonalityResult }) 
     renderStoryImage(result, siteLabel)
       .then((blob) => {
         if (cancelled) return;
-        setFile(new File([blob], `formerve-${result.type.code}.png`, { type: "image/png" }));
+        setFile(new File([blob], `scrollmi-${result.type.code}.png`, { type: "image/png" }));
         setStatus("ready");
       })
       .catch((err) => {

@@ -28,7 +28,7 @@ export async function renderStoryImage(result: PersonalityResult, siteLabel: str
 
   ctx.globalAlpha = 0.8;
   ctx.font = `600 38px ${SANS}`;
-  spacedText(ctx, "MY FORMERVE TYPE", SIDE, 300, 8);
+  spacedText(ctx, "MY SCROLLMI TYPE", SIDE, 300, 8);
   ctx.globalAlpha = 1;
 
   ctx.font = `700 250px ${MONO}`;
